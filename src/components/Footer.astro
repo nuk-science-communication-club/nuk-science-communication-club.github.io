@@ -1,0 +1,39 @@
+---
+import { site } from '../data/site';
+import { nav } from '../data/nav';
+import { url } from '../scripts/utils';
+import Logo from './Logo.astro';
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <a class="brand" href={url()}><Logo size={44} /><span>{site.name}<br /><small class="en">{site.nameEn}</small></span></a>
+        <p class="slogan">{site.slogan}<br /><span class="en">{site.sloganEn}</span></p>
+      </div>
+      <nav aria-label="頁尾選單">
+        <a href={url()}>首頁</a>
+        {nav.map((n) => <a href={url(n.href)}>{n.label}</a>)}
+      </nav>
+      <div class="contact">
+        <p><strong>社課</strong>　{site.meeting.day} {site.meeting.time}<br />{site.meeting.place}</p>
+        <p><strong>Email</strong>　<a href={`mailto:${site.email}`}>{site.email}</a></p>
+        <p><strong>Instagram</strong>　<a href={site.instagram} target="_blank" rel="noopener">{site.instagramHandle}</a></p>
+      </div>
+    </div>
+    <p class="copy">© {new Date().getFullYear()} {site.name}</p>
+  </div>
+</footer>
+<style>
+  .site-footer { background: #060e22; color: #b8c6e6; padding: 72px 0 calc(32px + env(safe-area-inset-bottom, 0px)); font-size: .92rem; }
+  .top { display: grid; gap: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .brand { display: flex; gap: 12px; align-items: center; text-decoration: none; color: var(--white); font-weight: 700; line-height: 1.4; }
+  .brand small { color: var(--sky); font-weight: 500; font-size: .7rem; }
+  .slogan { margin-top: 1.2em; color: var(--white); font-weight: 700; }
+  .slogan .en { color: var(--lime); font-size: .8rem; }
+  nav { display: grid; gap: .5em; align-content: start; }
+  nav a, .contact a { text-decoration: none; }
+  nav a:hover, .contact a:hover { color: var(--white); }
+  .contact strong { color: var(--white); }
+  .copy { margin: 56px 0 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.08); font-size: .8rem; }
+</style>

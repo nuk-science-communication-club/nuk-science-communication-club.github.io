@@ -1,0 +1,158 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import Journey from '../components/Journey.astro';
+import { site } from '../data/site';
+
+const learn = ['自走車', 'Arduino / ESP32', '機器人', 'STEM', '科學實驗', '科學講解', '活動設計', '教案設計'];
+const gain = ['動手製作', '科技能力', '上台經驗', '教學經驗', '活動執行', '團隊合作', '講師／助教機會', '工讀機會', '專案開發'];
+
+// TODO: 依實際制度確認答案（特別是標註「待確認」的題目）
+const faq = [
+  { q: '不是理科生可以加入嗎？', a: '可以！科傳社不一定要是理科生，很多社員都是從零開始，加入後一起學。' },
+  { q: '完全不會程式可以嗎？', a: '可以。社課會從最基礎的地方開始帶，不需要任何先備知識。' },
+  { q: '一定每週都要到嗎？', a: '建議盡量參加，才跟得上課程進度；有事請假跟幹部說一聲即可。（詳細規定待確認）' },
+  { q: '要繳社費嗎？', a: '不用，社課免費、免社團費。' },
+  { q: '晚餐真的免費嗎？', a: '真的。社課時段提供晚餐。' },
+  { q: '怎麼成為助教？', a: '參與社課與培訓後，就有機會跟著學長姊到國中科學社團、營隊或科普活動擔任助教。' },
+  { q: '怎麼成為講師？', a: '累積助教經驗、完成教案與試教後，可以擔任講師，獨立帶一堂課。（詳細流程待確認）' },
+  { q: '可以自己做專案嗎？', a: '非常歡迎！社團可以協助你找隊友、找資源，像 Greenmind 就是從社員發展出來的專案。' },
+  { q: '大四可以參加嗎？', a: '招募對象以大一至大三為主，大四同學歡迎先私訊詢問。（依實際制度填寫）' },
+];
+---
+<Layout title="加入我們" description="每週三 18:00–20:00，理學院 508 創客教室。免費社課、免社團費、提供晚餐，不需要任何基礎就能加入高大科傳社。">
+  <PageHero eyebrow="Join us" title="每週三，<br />來做點不一樣的。" lead="不需要本來就會。很多事情，加入後我們一起學。">
+    <div class="hero-cta">
+      <a class="btn btn--lime" href="#how">怎麼加入 <span class="arrow" aria-hidden="true">↓</span></a>
+      <a class="btn btn--ghost" href={site.instagram} target="_blank" rel="noopener">Instagram ↗</a>
+    </div>
+  </PageHero>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <p class="eyebrow en">Class info</p>
+      <h2 class="h-section">社課資訊</h2>
+      <dl class="info">
+        <div class="reveal"><dt>時間</dt><dd>{site.meeting.day}<br /><span class="en">{site.meeting.time}</span></dd></div>
+        <div class="reveal" data-delay="1"><dt>地點</dt><dd>{site.meeting.place}</dd></div>
+        <div class="reveal" data-delay="2"><dt>招募對象</dt><dd>{site.meeting.who}<br /><small>不一定要是理科生</small></dd></div>
+        <div class="reveal" data-delay="3"><dt>社費</dt><dd>{site.meeting.fee}<br /><small>免費社課・提供晚餐</small></dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="wrap">
+      <p class="eyebrow en">Your journey</p>
+      <h2 class="h-section">加入科傳，你會經歷……</h2>
+      <div style="margin-top:56px"><Journey /></div>
+    </div>
+  </section>
+
+  <section class="section section--ice">
+    <div class="wrap two">
+      <div>
+        <p class="eyebrow en">What you'll learn</p>
+        <h2 class="h-section">你可以學什麼？</h2>
+        <p class="muted">依每學期實際安排更新。</p>
+        <ul class="pills">{learn.map((l, i) => <li class="reveal" data-delay={i % 4}>{l}</li>)}</ul>
+      </div>
+      <div>
+        <p class="eyebrow en">What you'll gain</p>
+        <h2 class="h-section">你可以獲得什麼？</h2>
+        <ul class="checks">{gain.map((g, i) => <li class="reveal" data-delay={i % 4}>{g}</li>)}</ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <div class="teach">
+        <div>
+          <p class="eyebrow en">Teach &amp; work</p>
+          <h2 class="h-section">把你學會的東西，<br />變成真正的經驗。</h2>
+        </div>
+        <div class="teach-body">
+          <p>經過培訓後，社員有機會參與國中科學社團、營隊及科普活動，擔任講師或助教，累積實際教學與活動經驗。部分合作活動提供工讀機會。</p>
+          <ol class="path">
+            <li><strong>參加社課</strong><span>學會基本技術與實驗</span></li>
+            <li><strong>培訓</strong><span>學習教學與活動帶領</span></li>
+            <li><strong>助教</strong><span>跟著學長姊進國中、營隊</span></li>
+            <li><strong>講師</strong><span>獨立設計並帶領課程</span></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ice">
+    <div class="wrap faq-wrap">
+      <div>
+        <p class="eyebrow en">FAQ</p>
+        <h2 class="h-section">常見問題</h2>
+      </div>
+      <div class="faq">
+        {faq.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <p>{f.a}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="section section--dark how">
+    <div class="wrap">
+      <p class="eyebrow en">How to join</p>
+      <h2 class="h-section">如何加入</h2>
+      <ol class="steps">
+        <li class="reveal"><span class="en">01</span><strong>追蹤 Instagram</strong><p>最新社課與活動資訊都會在 IG 公布。</p></li>
+        <li class="reveal" data-delay="1"><span class="en">02</span><strong>直接來社課</strong><p>{site.meeting.day} {site.meeting.time}，{site.meeting.place}，第一次來也歡迎。</p></li>
+        <li class="reveal" data-delay="2"><span class="en">03</span><strong>一起動手做</strong><p>找幹部報到，開始你的 EXPLORE。</p></li>
+      </ol>
+      <div class="how-cta">
+        <a class="btn btn--lime" href={site.instagram} target="_blank" rel="noopener">私訊 Instagram {site.instagramHandle} ↗</a>
+        <a class="btn btn--ghost" href={`mailto:${site.email}`}>寄信給我們</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 10px; }
+  .info { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; margin: 40px 0 0; }
+  .info div { background: var(--ice); border-radius: var(--radius); padding: 24px; }
+  .info dt { font-size: .8rem; color: var(--blue); font-weight: 700; letter-spacing: .1em; }
+  .info dd { margin: .4em 0 0; font-size: 1.3rem; font-weight: 900; line-height: 1.4; }
+  .info small { font-size: .85rem; font-weight: 500; color: var(--muted); }
+  .two { display: grid; gap: 56px; }
+  @media (min-width: 900px) { .two { grid-template-columns: 1fr 1fr; } }
+  .muted { color: var(--muted); }
+  .pills { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .pills li { background: var(--white); border: 1px solid var(--line); padding: .6em 1.2em; border-radius: 999px; font-weight: 700; }
+  .checks { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 24px; }
+  .checks li { background: var(--white); border-radius: var(--radius-sm); padding: 14px 16px; font-weight: 700; display: flex; gap: 8px; align-items: center; }
+  .checks li::before { content: '✓'; color: var(--navy); background: var(--lime); width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: .75rem; flex: none; }
+  .teach { display: grid; gap: 32px; }
+  @media (min-width: 900px) { .teach { grid-template-columns: 1fr 1fr; gap: 64px; } }
+  .teach-body > p { font-size: 1.1rem; color: var(--muted); }
+  .path { list-style: none; padding: 0; margin: 28px 0 0; display: grid; gap: 10px; counter-reset: s; }
+  .path li { counter-increment: s; display: flex; gap: 14px; align-items: center; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--ice); }
+  .path li::before { content: counter(s); font-family: var(--font-en); font-weight: 700; width: 32px; height: 32px; border-radius: 50%; background: var(--navy); color: var(--lime); display: grid; place-items: center; flex: none; }
+  .path span { color: var(--muted); font-size: .9rem; margin-left: auto; text-align: right; }
+  .faq-wrap { display: grid; gap: 32px; }
+  @media (min-width: 900px) { .faq-wrap { grid-template-columns: 1fr 2fr; } }
+  details { background: var(--white); border-radius: var(--radius-sm); margin-bottom: 10px; border: 1px solid var(--line); }
+  summary { cursor: pointer; padding: 18px 52px 18px 20px; font-weight: 700; list-style: none; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '+'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 1.4rem; color: var(--blue); transition: transform .3s; }
+  details[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+  details p { padding: 0 20px 18px; margin: 0; color: var(--muted); }
+  .steps { list-style: none; padding: 0; display: grid; gap: 16px; margin: 40px 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .steps li { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius); padding: 28px; }
+  .steps span { color: var(--lime); font-weight: 700; font-size: 2rem; display: block; }
+  .steps strong { font-size: 1.25rem; }
+  .steps p { color: #b8c6e6; margin: .4em 0 0; }
+  .how-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+</style>

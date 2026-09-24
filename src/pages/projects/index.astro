@@ -1,0 +1,82 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PageHero from '../../components/PageHero.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { categories } from '../../data/site';
+import { getProjects, url } from '../../scripts/utils';
+
+const projects = await getProjects();
+const activities = projects.filter((p) => p.data.category !== 'member');
+const members = projects.filter((p) => p.data.category === 'member');
+const activityCats = (['school', 'outreach', 'workshop', 'event'] as const).filter((c) =>
+  activities.some((p) => p.data.category === c),
+);
+---
+<Layout title="活動與專案" description="高大科傳社的活動與專案作品集：國中科學社團、科普推廣、工作坊、大型活動協作，以及從社團發展出的社員專案。">
+  <PageHero eyebrow="Projects" title="活動與專案" lead="科傳社一起完成的事，以及從這裡長出來的社員專案。">
+    <nav class="jump" aria-label="分區">
+      <a href="#activities" class="btn btn--lime">ACTIVITIES</a>
+      <a href="#members" class="btn btn--ghost">MEMBER PROJECTS</a>
+    </nav>
+  </PageHero>
+
+  <section id="activities" class="section section--ice">
+    <div class="wrap">
+      <p class="eyebrow en">Activities</p>
+      <h2 class="h-section">社團一起完成的事情</h2>
+      <div class="filters" role="group" aria-label="依類型篩選" data-filter-group>
+        <button class="chip is-on" data-filter="all" aria-pressed="true">全部</button>
+        {activityCats.map((c) => (
+          <button class="chip" data-filter={c} aria-pressed="false">{categories[c].label}</button>
+        ))}
+      </div>
+      <div class="grid grid-3" data-filter-list>
+        {activities.map((p, i) => <ProjectCard project={p} delay={i % 3} />)}
+      </div>
+    </div>
+  </section>
+
+  <section id="members" class="section section--white">
+    <div class="wrap">
+      <p class="eyebrow en">Member projects</p>
+      <h2 class="h-section">從社員中發展出來的專案</h2>
+      <p class="lead">社課只是起點。當社員開始自己找問題、找隊友、做 Prototype，專案就可能走得更遠。</p>
+      <div class="grid grid-3" style="margin-top:32px">
+        {members.map((p, i) => <ProjectCard project={p} delay={i % 3} />)}
+        <a class="next reveal" href={url('join')}>
+          <span class="en">PROJECT 00{members.length + 1}</span>
+          <strong>下一個專案，<br />可能是你的。</strong>
+          <span class="en go">JOIN US →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const group = document.querySelector('[data-filter-group]');
+  const cards = document.querySelectorAll<HTMLElement>('[data-filter-list] .card');
+  group?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-filter]');
+    if (!btn) return;
+    group.querySelectorAll('[data-filter]').forEach((b) => {
+      b.classList.toggle('is-on', b === btn);
+      b.setAttribute('aria-pressed', String(b === btn));
+    });
+    const f = btn.dataset.filter;
+    cards.forEach((c) => (c.hidden = f !== 'all' && c.dataset.category !== f));
+  });
+</script>
+
+<style>
+  .jump { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+  .jump .btn { font-family: var(--font-en); font-size: .85rem; letter-spacing: .08em; }
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 32px; }
+  :global(.chip) { font: inherit; font-size: .9rem; font-weight: 700; padding: .5em 1.1em; border-radius: 999px; border: 1px solid var(--line); background: var(--white); color: var(--navy); cursor: pointer; transition: all .2s; }
+  :global(.chip:hover) { border-color: var(--blue); }
+  :global(.chip.is-on) { background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .next { border: 2px dashed var(--line); border-radius: var(--radius); padding: 32px; text-decoration: none; display: flex; flex-direction: column; justify-content: center; gap: 12px; min-height: 280px; color: var(--muted); transition: border-color .3s, color .3s, opacity .8s var(--ease), transform .8s var(--ease); }
+  .next:hover { border-color: var(--blue); color: var(--navy); }
+  .next strong { font-size: 1.5rem; color: var(--navy); line-height: 1.35; }
+  .next .go { color: var(--blue); font-weight: 700; }
+</style>

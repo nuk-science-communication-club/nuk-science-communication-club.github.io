@@ -1,0 +1,73 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import CtaPair from '../components/CtaPair.astro';
+import { site } from '../data/site';
+
+const beliefs = [
+  { t: '不需要本來就會', d: '每個人都是從第一次開始。我們相信好奇心比基礎更重要。' },
+  { t: '動手做才會真的懂', d: '看起來很酷的東西，要自己做一次才會變成你的能力。' },
+  { t: '會教，才是真的學會', d: '把科學講給國中生聽，是最好的學習方式。' },
+  { t: '專案可以走出教室', d: '從社課開始的想法，也可以走向競賽、研究、創業與真實場域。' },
+];
+---
+<Layout title="關於科傳社" description="國立高雄大學科學傳播社是一群大學生，一起做科技、做科學教育，並發展自己專案的地方。">
+  <PageHero eyebrow="About" title="關於科傳社" lead="一群大學生，真的在做很多有趣的科技跟科學教育。" />
+
+  <section class="section section--white">
+    <div class="wrap intro">
+      <h2 class="h-section">我們是誰？</h2>
+      <div>
+        <p class="big">{site.name}（{site.nameEn}）是一個讓學生接觸科技、動手實作、參與科普教育，最後發展自己專案的地方。</p>
+        <p>我們每週三在{site.meeting.place}上課，學自走車、機器人、程式與科學實驗；經過培訓後，社員走進高雄的國中科學社團、營隊與科普活動，把科學帶給更多人。也有社員從這裡出發，做出像 Greenmind 這樣的專案。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--ice">
+    <div class="wrap">
+      <p class="eyebrow en">What we believe</p>
+      <h2 class="h-section">我們相信什麼</h2>
+      <div class="beliefs">
+        {beliefs.map((b, i) => (
+          <div class="reveal" data-delay={i}>
+            <span class="en">0{i + 1}</span>
+            <h3>{b.t}</h3>
+            <p>{b.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--white">
+    <div class="wrap">
+      <p class="eyebrow en">Find us</p>
+      <h2 class="h-section">社群連結</h2>
+      <div class="links">
+        <a href={site.instagram} target="_blank" rel="noopener"><span class="en">INSTAGRAM</span><strong>{site.instagramHandle}</strong><em>↗</em></a>
+        <a href={`mailto:${site.email}`}><span class="en">EMAIL</span><strong>{site.email}</strong><em>↗</em></a>
+      </div>
+    </div>
+  </section>
+
+  <CtaPair />
+</Layout>
+
+<style>
+  .intro { display: grid; gap: 24px; }
+  @media (min-width: 900px) { .intro { grid-template-columns: 1fr 2fr; gap: 64px; } }
+  .big { font-size: clamp(1.2rem, 2.2vw, 1.5rem); font-weight: 700; line-height: 1.6; }
+  .intro p:last-child { color: var(--muted); font-size: 1.05rem; }
+  .beliefs { display: grid; gap: 16px; margin-top: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .beliefs div { background: var(--white); border-radius: var(--radius); padding: 28px; }
+  .beliefs span { color: var(--blue); font-weight: 700; }
+  .beliefs h3 { font-size: 1.25rem; margin-top: .4em; }
+  .beliefs p { color: var(--muted); margin: 0; }
+  .links { display: grid; gap: 14px; margin-top: 32px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+  .links a { display: flex; flex-direction: column; padding: 28px; border-radius: var(--radius); background: var(--navy); color: var(--white); text-decoration: none; position: relative; transition: transform .3s var(--ease); }
+  .links a:hover { transform: translateY(-4px); }
+  .links span { font-size: .75rem; letter-spacing: .2em; color: var(--sky); }
+  .links strong { font-size: 1.25rem; word-break: break-all; }
+  .links em { position: absolute; right: 24px; top: 24px; font-style: normal; color: var(--lime); font-size: 1.4rem; }
+</style>

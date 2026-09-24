@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { url } from '../scripts/utils';
+---
+<Layout title="找不到頁面">
+  <PageHero eyebrow="404" title="這個實驗<br />好像失敗了。" lead="找不到這個頁面，但科學就是從失敗開始的。">
+    <a class="btn btn--lime" href={url()}>回到首頁 →</a>
+  </PageHero>
+</Layout>

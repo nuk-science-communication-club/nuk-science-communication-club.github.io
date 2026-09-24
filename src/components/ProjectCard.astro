@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Photo from './Photo.astro';
+import { categories } from '../data/site';
+import { url } from '../scripts/utils';
+interface Props { project: CollectionEntry<'projects'>; delay?: number }
+const { project, delay = 0 } = Astro.props;
+const d = project.data;
+const variants = { school: 'blue', outreach: 'sky', workshop: 'navy', event: 'navy', member: 'lime' } as const;
+---
+<article class="card reveal" data-delay={delay} data-year={d.year} data-category={d.category}
+  data-partners={d.partners.join('|')}>
+  <a href={url(`projects/${project.id}`)} class="link">
+    <div class="media">
+      <Photo src={d.coverImage} alt={d.coverAlt ?? d.title} hint={d.title} ratio="16 / 10" variant={variants[d.category]} />
+      <span class="involve">{d.involvement}</span>
+    </div>
+    <div class="body">
+      <p class="meta"><span class="en year">{d.year}</span><span>{categories[d.category].label}</span></p>
+      <h3>{d.title}</h3>
+      <p class="desc">{d.description}</p>
+      <div class="tags">{d.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}</div>
+      <span class="more en">View Project <span aria-hidden="true">→</span></span>
+    </div>
+  </a>
+</article>
+<style>
+  .card { background: var(--white); border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line);
+    transition: transform .35s var(--ease), box-shadow .35s var(--ease), opacity .8s var(--ease); }
+  .card.is-in:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+  .link { display: flex; flex-direction: column; height: 100%; text-decoration: none; color: inherit; }
+  .media { position: relative; }
+  .media :global(.photo) { border-radius: 0; }
+  .card:hover .media :global(img) { transform: scale(1.05); }
+  .involve { position: absolute; top: 12px; left: 12px; font-size: .72rem; font-weight: 700;
+    background: rgba(255,255,255,.92); color: var(--navy); padding: .3em .75em; border-radius: 999px; }
+  .body { padding: 20px 22px 24px; display: flex; flex-direction: column; flex: 1; }
+  .meta { display: flex; gap: 10px; align-items: center; font-size: .82rem; color: var(--muted); margin-bottom: .4em; }
+  .year { font-weight: 700; color: var(--blue); }
+  h3 { font-size: 1.2rem; margin-bottom: .35em; }
+  .desc { font-size: .93rem; color: var(--muted); flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1em; }
+  .more { font-weight: 700; font-size: .85rem; color: var(--navy); }
+  .more span { display: inline-block; transition: transform .25s var(--ease); }
+  .card:hover .more span { transform: translateX(4px); }
+</style>

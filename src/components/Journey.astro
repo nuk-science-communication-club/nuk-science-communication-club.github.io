@@ -1,0 +1,47 @@
+---
+import { journey } from '../data/journey';
+import Photo from './Photo.astro';
+const variants = ['sky', 'blue', 'navy', 'lime', 'blue'] as const;
+---
+<ol class="journey" data-journey>
+  {journey.map((s, i) => (
+    <li class="journey-step">
+      <div class="node" aria-hidden="true"><span class="en">0{i + 1}</span></div>
+      <div class="content reveal">
+        <p class="key en">{s.key}<span>｜{s.label}</span></p>
+        <h3>{s.title}</h3>
+        <p class="text">{s.text}</p>
+        <ul class="chips">{s.items.map((it) => <li>{it}</li>)}</ul>
+      </div>
+      <div class="pic reveal" data-delay="1">
+        <Photo hint={`${s.key}｜${s.label}的照片`} variant={variants[i]} ratio="4 / 3" />
+      </div>
+    </li>
+  ))}
+</ol>
+<style>
+  .journey { list-style: none; margin: 0; padding: 0; position: relative; --progress: 0; }
+  .journey::before, .journey::after { content: ''; position: absolute; left: 21px; top: 0; width: 2px; }
+  .journey::before { bottom: 0; background: rgba(255,255,255,.12); }
+  .journey::after { height: calc(var(--progress) * 100%); background: linear-gradient(var(--sky), var(--lime)); }
+  .journey-step { position: relative; display: grid; grid-template-columns: 1fr; gap: 20px; padding: 0 0 72px 64px; }
+  .journey-step:last-child { padding-bottom: 0; }
+  .node {
+    position: absolute; left: 0; top: 0; width: 44px; height: 44px; border-radius: 50%;
+    background: var(--navy); border: 2px solid rgba(255,255,255,.25); display: grid; place-items: center;
+    font-size: .8rem; font-weight: 700; color: #8ea3cf; transition: all .4s var(--ease);
+  }
+  .journey-step:global(.is-active) .node { background: var(--lime); color: var(--navy); border-color: var(--lime); box-shadow: 0 0 0 8px rgba(198,244,50,.15); }
+  .key { font-size: clamp(1.8rem, 4.2vw, 3rem); font-weight: 700; color: var(--sky); line-height: 1; margin-bottom: .4em; }
+  .key span { font-family: var(--font); font-size: .45em; color: var(--white); font-weight: 700; letter-spacing: .05em; margin-left: .3em; vertical-align: middle; }
+  h3 { font-size: clamp(1.25rem, 2.2vw, 1.6rem); }
+  .text { color: #b8c6e6; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; margin: 0; }
+  .chips li { font-size: .82rem; padding: .3em .85em; border-radius: 999px; border: 1px solid rgba(124,200,255,.35); color: var(--sky); }
+  @media (min-width: 900px) {
+    .journey::before, .journey::after { left: 50%; transform: translateX(-50%); }
+    .journey-step { grid-template-columns: 1fr 1fr; gap: 110px; padding: 0 0 120px; align-items: center; }
+    .node { left: 50%; top: 50%; transform: translate(-50%, -50%); width: 56px; height: 56px; font-size: .95rem; }
+    .journey-step:nth-child(even) .content { order: 2; }
+  }
+</style>

@@ -1,0 +1,41 @@
+---
+import { url } from '../scripts/utils';
+---
+<section class="cta-pair" aria-label="加入或合作">
+  <a class="panel join reveal" href={url('join')}>
+    <p class="en kicker">FOR NUK STUDENTS</p>
+    <h2>想加入科傳？</h2>
+    <p>不需要本來就會，每週三一起來做點不一樣的。</p>
+    <span class="go en">JOIN US <span aria-hidden="true">→</span></span>
+  </a>
+  <a class="panel collab reveal" data-delay="1" href={url('collaborate')}>
+    <p class="en kicker">FOR SCHOOLS &amp; PARTNERS</p>
+    <h2>想和我們一起做科學？</h2>
+    <p>國中、高中、老師、學校、基金會、政府、企業與教育單位。</p>
+    <span class="go en">COLLABORATE <span aria-hidden="true">→</span></span>
+  </a>
+</section>
+<style>
+  .cta-pair { display: grid; grid-template-columns: 1fr; }
+  @media (min-width: 860px) { .cta-pair { grid-template-columns: 1fr 1fr; } }
+  .panel {
+    position: relative; overflow: hidden; text-decoration: none; min-height: clamp(320px, 42vw, 480px);
+    padding: clamp(40px, 6vw, 80px) var(--gutter); display: flex; flex-direction: column; justify-content: flex-end;
+    transition: opacity .8s var(--ease), transform .8s var(--ease);
+  }
+  .panel::after {
+    content: ''; position: absolute; width: 60%; aspect-ratio: 1; right: -15%; top: -20%; border-radius: 42% 58% 60% 40% / 45% 40% 60% 55%;
+    background: rgba(255,255,255,.1); transition: transform .8s var(--ease);
+  }
+  .panel:hover::after { transform: scale(1.15) rotate(20deg); }
+  .join { background: var(--blue); color: var(--white); }
+  .collab { background: var(--navy); color: var(--white); }
+  .kicker { font-size: .75rem; letter-spacing: .22em; opacity: .75; margin-bottom: .6em; }
+  h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 900; max-width: 9em; }
+  p { max-width: 26em; opacity: .9; }
+  .go { margin-top: 1.2em; font-weight: 700; font-size: 1.3rem; display: inline-flex; gap: .4em; align-items: center; }
+  .join .go { color: var(--lime); }
+  .collab .go { color: var(--sky); }
+  .go span { transition: transform .3s var(--ease); }
+  .panel:hover .go span { transform: translateX(8px); }
+</style>

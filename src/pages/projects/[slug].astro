@@ -1,0 +1,183 @@
+---
+import { render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Photo from '../../components/Photo.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import Blob from '../../components/Blob.astro';
+import { categories } from '../../data/site';
+import { getProjects, url, asset } from '../../scripts/utils';
+
+export async function getStaticPaths() {
+  const all = await getProjects();
+  return all.map((project) => {
+    // 相關活動：同類型優先，再用共同 tag 補足
+    const related = all
+      .filter((p) => p.id !== project.id)
+      .map((p) => ({
+        p,
+        score: (p.data.category === project.data.category ? 3 : 0) +
+          p.data.tags.filter((t) => project.data.tags.includes(t)).length,
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 3)
+      .map((x) => x.p);
+    return { params: { slug: project.id }, props: { project, related } };
+  });
+}
+
+const { project, related } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+const cat = categories[d.category];
+const r = d.result;
+const results = [
+  { n: r.members, l: '參與社員' },
+  { n: r.students, l: '參與學生' },
+  { n: r.hours, l: '活動時數' },
+  { n: r.sessions, l: '場次' },
+].filter((x) => x.n != null);
+let n = 0;
+const num = () => String(++n).padStart(2, '0');
+---
+<Layout title={d.title} description={d.description} image={asset(d.coverImage)} type="article">
+  <section class="p-hero">
+    <Blob class="b" color="rgba(47,107,255,.45)" shape={1} />
+    <div class="wrap inner">
+      <a class="back en" href={url('projects')}>← ALL PROJECTS</a>
+      <p class="meta">
+        <span class="en year">{d.year}</span>
+        <span class="tag">{cat.label}</span>
+        <span class="badge">{d.involvement}</span>
+      </p>
+      <h1 class="h-display">{d.title}</h1>
+      {d.titleEn && <p class="en sub">{d.titleEn}</p>}
+      <div class="tags">{d.tags.map((t) => <span class="tag tag--dark">{t}</span>)}</div>
+    </div>
+  </section>
+
+  <div class="wrap cover">
+    <Photo src={d.coverImage} alt={d.coverAlt ?? d.title} hint={`${d.title}｜主視覺照片`} ratio="21 / 9" eager variant={d.category === 'member' ? 'lime' : 'blue'} />
+  </div>
+
+  <article class="wrap body">
+    <aside class="facts">
+      <dl>
+        <div><dt>年份</dt><dd>{d.year}</dd></div>
+        <div><dt>類型</dt><dd>{cat.label}</dd></div>
+        <div><dt>科傳社角色</dt><dd>{d.involvement}</dd></div>
+        {d.partners.length > 0 && <div><dt>合作單位</dt><dd>{d.partners.join('、')}</dd></div>}
+        {d.location && <div><dt>地點</dt><dd>{d.location}</dd></div>}
+      </dl>
+      {d.externalLink && (
+        <a class="btn btn--primary" href={d.externalLink.url} target="_blank" rel="noopener">{d.externalLink.label} ↗</a>
+      )}
+    </aside>
+
+    <div class="sections">
+      <section class="block">
+        <p class="num en">{num()} ABOUT</p>
+        <h2>這是什麼{d.category === 'member' ? '專案' : '活動'}？</h2>
+        <p class="about">{d.about ?? d.description}</p>
+      </section>
+
+      {d.ourRole.length > 0 && (
+        <section class="block">
+          <p class="num en">{num()} OUR ROLE</p>
+          <h2>{d.category === 'member' ? '團隊負責什麼？' : '科傳社在裡面負責什麼？'}</h2>
+          <ul class="roles">{d.ourRole.map((x) => <li>{x}</li>)}</ul>
+        </section>
+      )}
+
+      <section class="block">
+        <p class="num en">{num()} WHAT WE DID</p>
+        <h2>實際做了什麼</h2>
+        <div class="prose"><Content /></div>
+      </section>
+
+      <section class="block">
+        <p class="num en">{num()} GALLERY</p>
+        <h2>活動照片</h2>
+        <div class="gallery">
+          {d.gallery.length > 0
+            ? d.gallery.map((g) => <Photo src={g.src} alt={g.alt} ratio="4 / 3" />)
+            : ['操作／教學的照片', '討論／製作的照片', '互動的照片'].map((h, i) => (
+                <Photo hint={h} ratio="4 / 3" variant={(['sky', 'blue', 'navy'] as const)[i]} />
+              ))}
+        </div>
+      </section>
+
+      {results.length > 0 && (
+        <section class="block">
+          <p class="num en">{num()} RESULT</p>
+          <h2>成果</h2>
+          <div class="results">
+            {results.map((x) => <div><strong class="en" data-count={x.n}>{x.n}</strong><span>{x.l}</span></div>)}
+          </div>
+        </section>
+      )}
+
+      {d.story && (
+        <section class="block">
+          <p class="num en">{num()} STORY</p>
+          <blockquote class="story">
+            <p>「{d.story.quote}」</p>
+            <cite>— {d.story.author}</cite>
+          </blockquote>
+        </section>
+      )}
+    </div>
+  </article>
+
+  {related.length > 0 && (
+    <section class="section section--ice">
+      <div class="wrap">
+        <p class="eyebrow en">{num()} Related projects</p>
+        <h2 class="h-section">其他活動</h2>
+        <div class="grid grid-3" style="margin-top:32px">
+          {related.map((p, i) => <ProjectCard project={p} delay={i} />)}
+        </div>
+      </div>
+    </section>
+  )}
+</Layout>
+
+<style>
+  .p-hero { background: var(--navy); color: var(--white); padding: clamp(120px, 16vw, 180px) 0 clamp(110px, 14vw, 170px); position: relative; overflow: hidden; }
+  .p-hero :global(.b) { width: 520px; right: -160px; top: -100px; }
+  .inner { position: relative; }
+  .back { display: inline-block; text-decoration: none; font-size: .8rem; letter-spacing: .15em; color: var(--sky); margin-bottom: 28px; }
+  .back:hover { color: var(--white); }
+  .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+  .year { font-weight: 700; color: var(--lime); font-size: 1.1rem; }
+  .h-display { font-size: clamp(2.1rem, 5.5vw, 4.2rem); margin-top: .3em; }
+  .sub { color: var(--sky); font-size: clamp(1rem, 2vw, 1.3rem); margin-top: -.2em; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .tag--dark { background: rgba(255,255,255,.1); color: var(--white); }
+  .cover { margin-top: clamp(-130px, -12vw, -80px); position: relative; }
+  @media (max-width: 700px) { .cover :global(.photo) { aspect-ratio: 4 / 3 !important; } }
+
+  .body { display: grid; gap: 40px; padding-block: 64px 96px; }
+  @media (min-width: 960px) { .body { grid-template-columns: 280px 1fr; gap: 72px; } .facts { position: sticky; top: 100px; align-self: start; } }
+  .facts { background: var(--white); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; }
+  dl { margin: 0 0 20px; display: grid; gap: 14px; }
+  dt { font-size: .78rem; color: var(--muted); }
+  dd { margin: 0; font-weight: 700; }
+  .facts .btn { width: 100%; justify-content: center; }
+
+  .block { padding-bottom: 56px; margin-bottom: 56px; border-bottom: 1px solid var(--line); }
+  .block:last-child { border: 0; margin: 0; padding: 0; }
+  .num { font-size: .8rem; font-weight: 700; letter-spacing: .2em; color: var(--blue); margin-bottom: .5em; }
+  .block h2 { font-size: clamp(1.5rem, 3vw, 2rem); }
+  .about { font-size: 1.12rem; max-width: 40em; }
+  .roles { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+  .roles li { background: var(--navy); color: var(--white); padding: .55em 1.1em; border-radius: 999px; font-weight: 700; font-size: .95rem; }
+  .gallery { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+  .gallery :global(.photo) { border-radius: var(--radius-sm); }
+  .results { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .results div { background: var(--ice); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; }
+  .results strong { font-size: 2.6rem; color: var(--blue); line-height: 1.1; }
+  .results span { color: var(--muted); font-size: .9rem; }
+  .story { margin: 0; padding: 32px; background: var(--navy); color: var(--white); border-radius: var(--radius); }
+  .story p { font-size: clamp(1.2rem, 2.4vw, 1.6rem); font-weight: 700; line-height: 1.5; }
+  .story cite { color: var(--sky); font-style: normal; font-size: .9rem; }
+</style>

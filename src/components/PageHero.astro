@@ -1,0 +1,21 @@
+---
+import Blob from './Blob.astro';
+interface Props { eyebrow: string; title: string; lead?: string }
+const { eyebrow, title, lead } = Astro.props;
+---
+<section class="page-hero">
+  <Blob class="pb1" color="rgba(47,107,255,.5)" shape={2} />
+  <Blob class="pb2" color="rgba(124,200,255,.15)" shape={3} />
+  <div class="wrap inner">
+    <p class="eyebrow en">{eyebrow}</p>
+    <h1 class="h-display" set:html={title} />
+    {lead && <p class="lead">{lead}</p>}
+    <slot />
+  </div>
+</section>
+<style>
+  .inner { position: relative; animation: in .9s var(--ease) both; }
+  .page-hero :global(.pb1) { width: 460px; right: -140px; top: -140px; }
+  .page-hero :global(.pb2) { width: 380px; right: 18%; bottom: -260px; animation-delay: -4s; }
+  @keyframes in { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+</style>

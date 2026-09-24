@@ -1,0 +1,19 @@
+---
+interface Props { class?: string; color?: string; shape?: 1 | 2 | 3 }
+const { class: cls, color = 'var(--blue)', shape = 1 } = Astro.props;
+const paths = {
+  1: 'M421 316c-35 90-150 140-250 110S-5 300 15 190 150 5 270 20s186 206 151 296Z',
+  2: 'M390 110c55 70 40 190-40 250s-230 50-290-40S20 80 110 30s225 10 280 80Z',
+  3: 'M330 60c80 40 110 160 60 250s-190 130-280 70S0 190 50 110 250 20 330 60Z',
+};
+---
+<svg class:list={['blob', cls]} viewBox="0 0 440 440" aria-hidden="true" style={`--c:${color}`}>
+  <path d={paths[shape]} fill="var(--c)" />
+</svg>
+<style>
+  .blob { position: absolute; pointer-events: none; animation: float 14s ease-in-out infinite; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(12px, -18px) rotate(6deg); }
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+// 有照片就顯示照片（lazy loading）；沒有照片就顯示品牌風格的佔位圖，提醒幹部補照片。
+import { asset } from '../scripts/utils';
+interface Props {
+  src?: string;
+  alt?: string;
+  hint?: string;
+  ratio?: string;
+  variant?: 'blue' | 'navy' | 'sky' | 'lime';
+  eager?: boolean;
+  class?: string;
+}
+const { src, alt = '', hint = '照片待補', ratio = '4 / 3', variant = 'blue', eager = false, class: cls } = Astro.props;
+---
+<figure class:list={['photo', `photo--${variant}`, cls]} style={`aspect-ratio:${ratio}`}>
+  {src ? (
+    <img src={asset(src)} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  ) : (
+    <div class="ph" role="img" aria-label={alt || hint}>
+      <svg viewBox="0 0 200 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <path class="b1" d="M40 20c30-15 80-10 95 20s-5 60-40 70-80 5-90-25 5-50 35-65Z" />
+        <path class="b2" d="M150 80c20-5 45 10 45 35s-25 40-50 35-35-25-25-45 10-22 30-25Z" />
+        <circle class="dot" cx="160" cy="35" r="7" />
+      </svg>
+      <span class="label">📷 {hint}</span>
+    </div>
+  )}
+</figure>
+<style>
+  .photo { margin: 0; position: relative; overflow: hidden; border-radius: var(--radius); background: var(--navy-2); }
+  .photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .7s var(--ease); }
+  .ph { position: absolute; inset: 0; display: grid; place-items: end start; }
+  .ph svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .photo--blue { background: linear-gradient(135deg, #2f6bff, #122452); }
+  .photo--navy { background: linear-gradient(135deg, #1b3170, #0a1633); }
+  .photo--sky { background: linear-gradient(135deg, #7cc8ff, #2f6bff); }
+  .photo--lime { background: linear-gradient(135deg, #2f6bff, #0a1633 70%); }
+  .b1 { fill: rgba(255,255,255,.12); }
+  .b2 { fill: rgba(124,200,255,.25); }
+  .dot { fill: var(--lime); }
+  .label {
+    position: relative; margin: 14px; font-size: .75rem; color: rgba(255,255,255,.85);
+    background: rgba(10,22,51,.45); padding: .3em .8em; border-radius: 999px; backdrop-filter: blur(4px);
+  }
+</style>

@@ -1,0 +1,314 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Photo from '../components/Photo.astro';
+import Blob from '../components/Blob.astro';
+import Journey from '../components/Journey.astro';
+import ActivityMap from '../components/ActivityMap.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import CtaPair from '../components/CtaPair.astro';
+import { site } from '../data/site';
+import { url, asset, getProjects } from '../scripts/utils';
+
+const projects = await getProjects();
+const greenmind = projects.find((p) => p.id === 'greenmind');
+const latest = [
+  ...projects.filter((p) => p.data.featured && p.data.category !== 'member'),
+  ...projects.filter((p) => !p.data.featured && p.data.category !== 'member'),
+].slice(0, 6);
+
+// 名稱含「待」的（待補／待確認）先不列入統計
+const partners = new Set(projects.flatMap((p) => p.data.partners).filter((n) => !n.includes('待')));
+const schools = projects.filter((p) => p.data.category === 'school').length;
+const years = new Set(projects.map((p) => p.data.year));
+
+const heroShots = [
+  { hint: '自走車運行', v: 'blue' },
+  { hint: '社員在國中上課', v: 'sky' },
+  { hint: '小朋友做實驗', v: 'navy' },
+  { hint: '科普市集', v: 'lime' },
+] as const;
+
+const whatWeDo = [
+  { en: 'LEARN', zh: '學科技', text: '機器人、自走車、Arduino / ESP32、STEM 與科學實驗，從零開始。' },
+  { en: 'MAKE', zh: '動手做', text: '組裝、寫程式、做實驗、設計教具，把想法變成真的東西。' },
+  { en: 'SHARE', zh: '把科學帶出去', text: '走進國中、營隊、科普市集與工作坊，站上講台把科學教出去。' },
+];
+
+const action = [
+  { title: '校園科學教育', en: 'SCHOOL PROGRAMS', text: '到蚵寮、彌陀、燕巢、鳳翔國中開設每週科學社團課程。', icon: '🏫' },
+  { title: '科普推廣', en: 'OUTREACH', text: '北、中、南部科普活動，科普市集與互動攤位。', icon: '🧪' },
+  { title: '工作坊', en: 'WORKSHOPS', text: '校內 STEM 與科學實作工作坊，零基礎也能完成作品。', icon: '🛠️' },
+  { title: '大型活動協作', en: 'EVENT SUPPORT', text: '以協作／支援身分參與數位化科學競賽、高雄盃機器人挑戰賽等活動。', icon: '🤖' },
+];
+
+const perks = [
+  { t: '免費社課', i: '🎓' }, { t: '免社團費', i: '🆓' }, { t: '提供晚餐', i: '🍱' },
+  { t: '科技培訓', i: '⚙️' }, { t: '講師／助教機會', i: '🎤' }, { t: '工讀機會', i: '💼' }, { t: '實際活動經驗', i: '🚀' },
+];
+---
+<Layout>
+  <!-- 01 HERO -->
+  <section class="hero">
+    <Blob class="hb1" color="rgba(47,107,255,.55)" shape={1} />
+    <Blob class="hb2" color="rgba(124,200,255,.18)" shape={2} />
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow en">{site.sloganEn}</p>
+        <h1 class="h-display">做酷科技，<br />把科學<span class="hl">帶出去</span>。</h1>
+        <p class="lead">從第一次動手做，到第一次站上講台，<br />再到做出屬於自己的專案。</p>
+        <div class="hero-cta">
+          <a class="btn btn--primary" href="#what">看看我們在做什麼 <span class="arrow" aria-hidden="true">↓</span></a>
+          <a class="btn btn--ghost" href={url('join')}>加入我們</a>
+        </div>
+      </div>
+      <div class="hero-mosaic" aria-label="社員活動照片">
+        {heroShots.map((s, i) => (
+          <div class={`shot s${i}`}><Photo hint={s.hint} variant={s.v} ratio={i % 3 === 0 ? '4 / 5' : '1 / 1'} eager /></div>
+        ))}
+      </div>
+    </div>
+    <a class="scroll-hint en" href="#what" aria-label="往下捲動">SCROLL</a>
+  </section>
+
+  <!-- 02 WHAT WE DO -->
+  <section id="what" class="section section--white">
+    <div class="wrap">
+      <p class="eyebrow en reveal">What we do</p>
+      <h2 class="h-section reveal">科傳社到底在做什麼？</h2>
+      <div class="wwd">
+        {whatWeDo.map((w, i) => (
+          <div class="wwd-item reveal" data-delay={i}>
+            <span class="wwd-num en">0{i + 1}</span>
+            <p class="wwd-en en">{w.en}</p>
+            <h3>{w.zh}</h3>
+            <p>{w.text}</p>
+          </div>
+        ))}
+      </div>
+      <div class="stats reveal">
+        <div><strong class="en" data-count={projects.length}>{projects.length}</strong><span>累積活動與專案</span></div>
+        <div><strong class="en" data-count={schools}>{schools}</strong><span>合作國中科學社團</span></div>
+        <div><strong class="en" data-count={partners.size}>{partners.size}</strong><span>合作單位</span></div>
+        <div><strong class="en" data-count={years.size}>{years.size}</strong><span>年的足跡</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 YOUR JOURNEY -->
+  <section class="section section--dark journey-sec">
+    <Blob class="jb" color="rgba(47,107,255,.2)" shape={3} />
+    <div class="wrap">
+      <p class="eyebrow en reveal">Your journey</p>
+      <h2 class="h-section reveal">加入之後，<br />你可能會走到哪裡？</h2>
+      <p class="lead reveal">EXPLORE → MAKE → SHARE → CREATE → GO FURTHER</p>
+      <div class="journey-wrap"><Journey /></div>
+    </div>
+  </section>
+
+  <!-- 04 FEATURED MEMBER PROJECT -->
+  {greenmind && (
+    <section class="section section--ice">
+      <div class="wrap">
+        <p class="eyebrow en reveal">From club to project</p>
+        <h2 class="h-section reveal">從科傳出發。</h2>
+        <article class="feature reveal">
+          <div class="feature-media">
+            <Photo src={greenmind.data.coverImage} alt={greenmind.data.coverAlt ?? 'Greenmind'} hint="Greenmind 專案主視覺" ratio="16 / 11" variant="lime" />
+          </div>
+          <div class="feature-body">
+            <p class="feature-meta"><span class="badge en">MEMBER PROJECT</span><span class="en">PROJECT 001</span></p>
+            <h3 class="en gm">GREENMIND</h3>
+            <p class="gm-sub">{greenmind.data.titleEn}</p>
+            <p>{greenmind.data.description}</p>
+            <div class="tags">{greenmind.data.tags.map((t) => <span class="tag">{t}</span>)}</div>
+            <div class="feature-cta">
+              <a class="btn btn--primary" href={url('projects/greenmind')}>看專案介紹 <span class="arrow" aria-hidden="true">→</span></a>
+              {greenmind.data.externalLink && (
+                <a class="btn btn--ghost" href={greenmind.data.externalLink.url} target="_blank" rel="noopener">Explore Greenmind ↗</a>
+              )}
+            </div>
+          </div>
+        </article>
+        <p class="future reveal en">PROJECT 002 — <span>下一個會是你的專案嗎？</span></p>
+      </div>
+    </section>
+  )}
+
+  <!-- 05 SCIENCE IN ACTION -->
+  <section class="section section--white">
+    <div class="wrap">
+      <p class="eyebrow en reveal">Science in action</p>
+      <h2 class="h-section reveal">科學，不只發生在社課教室。</h2>
+      <div class="action">
+        {action.map((a, i) => (
+          <div class="action-item reveal" data-delay={i}>
+            <span class="action-icon" aria-hidden="true">{a.icon}</span>
+            <p class="en action-en">{a.en}</p>
+            <h3>{a.title}</h3>
+            <p>{a.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 MAP -->
+  <section class="section section--dark map-sec">
+    <div class="wrap map-grid">
+      <div>
+        <p class="eyebrow en reveal">Where we've been</p>
+        <h2 class="h-section reveal">我們去過哪裡？</h2>
+        <p class="lead reveal"><strong style="color:#fff">從高雄大學出發，讓科學走進更多地方。</strong></p>
+        <p class="reveal" style="color:#b8c6e6">目前與高雄地區多所國中合作科學社團，未來將逐步加入全台科普活動足跡。</p>
+        <a class="btn btn--lime reveal" href={url('collaborate')}>邀請我們到你的學校 <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <ActivityMap />
+    </div>
+  </section>
+
+  <!-- 07 PROJECTS -->
+  <section class="section section--ice">
+    <div class="wrap">
+      <div class="head-row">
+        <div>
+          <p class="eyebrow en reveal">Latest projects</p>
+          <h2 class="h-section reveal">我們正在累積的足跡。</h2>
+        </div>
+        <a class="btn btn--ghost reveal" href={url('projects')} style="color:var(--navy)">看全部活動 <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+      <div class="grid grid-3">
+        {latest.map((p, i) => <ProjectCard project={p} delay={i % 3} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 08 JOIN US -->
+  <section class="section section--white join-sec">
+    <div class="wrap">
+      <p class="eyebrow en reveal">Join us</p>
+      <h2 class="h-section reveal">每週三，來做點不一樣的。</h2>
+      <div class="join-grid">
+        <div class="time-card reveal">
+          <p class="en small">EVERY WEDNESDAY</p>
+          <p class="time en">18:00<span>–</span>20:00</p>
+          <p>{site.meeting.place}</p>
+          <p class="who">招募對象：{site.meeting.who}<br />不一定要是理科生，也不需要任何基礎。</p>
+        </div>
+        <ul class="perks">
+          {perks.map((p, i) => (
+            <li class="reveal" data-delay={i % 4}><span aria-hidden="true">{p.i}</span>{p.t}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="experience reveal">
+        <h3>把你學會的東西，變成真正的經驗。</h3>
+        <p>經過培訓後，社員有機會參與國中科學社團、營隊及科普活動，擔任講師或助教，累積實際教學與活動經驗。部分合作活動提供工讀機會。</p>
+        <a class="btn btn--primary" href={url('join')}>了解如何加入 <span class="arrow" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 TWO PATH CTA -->
+  <CtaPair />
+</Layout>
+
+<style>
+  /* HERO */
+  .hero { position: relative; min-height: 100svh; background: var(--navy); color: var(--white); overflow: hidden; display: flex; align-items: center; padding: 110px 0 80px; }
+  .hero :global(.hb1) { width: 620px; right: -160px; top: -120px; }
+  .hero :global(.hb2) { width: 520px; left: -200px; bottom: -220px; animation-delay: -5s; }
+  .hero-inner { position: relative; display: grid; gap: 48px; align-items: center; }
+  .hero-copy { animation: heroIn 1s var(--ease) both; }
+  .hl { color: var(--lime); }
+  .hero .lead { color: #c9d5f0; margin-bottom: 2rem; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+  .hero-mosaic { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; animation: heroIn 1.2s .2s var(--ease) both; }
+  .shot.s1 { margin-top: 40px; }
+  .shot.s2 { margin-top: -40px; }
+  .scroll-hint { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); font-size: .7rem; letter-spacing: .3em; color: var(--sky); text-decoration: none; padding-bottom: 28px; }
+  .scroll-hint::after { content: ''; position: absolute; left: 50%; bottom: 0; width: 1px; height: 22px; background: var(--sky); animation: drip 1.8s ease-in-out infinite; }
+  @keyframes drip { 0% { transform: scaleY(0); transform-origin: top; } 50% { transform: scaleY(1); transform-origin: top; } 51% { transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+  @keyframes heroIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
+  @media (min-width: 960px) {
+    .hero-inner { grid-template-columns: 1.1fr .9fr; }
+  }
+  @media (max-width: 959px) {
+    .hero-mosaic { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .shot.s1, .shot.s2 { margin-top: 0; }
+    .hero-mosaic :global(.photo) { aspect-ratio: 3 / 4 !important; border-radius: 14px; }
+    .hero-mosaic :global(.label) { display: none; }
+  }
+
+  /* WHAT WE DO */
+  .wwd { display: grid; gap: 0; margin-top: 48px; border-top: 1px solid var(--line); }
+  .wwd-item { position: relative; padding: 32px 0; border-bottom: 1px solid var(--line); }
+  .wwd-num { position: absolute; right: 0; top: 32px; color: var(--muted); font-size: .85rem; }
+  .wwd-en { font-size: clamp(3rem, 10vw, 6.5rem); font-weight: 700; line-height: .95; margin: 0 0 .15em; color: var(--navy);
+    background: linear-gradient(90deg, var(--navy) 0%, var(--blue) 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .wwd-item h3 { font-size: 1.35rem; }
+  .wwd-item p:last-child { color: var(--muted); max-width: 32em; margin: 0; }
+  @media (min-width: 900px) {
+    .wwd { grid-template-columns: repeat(3, 1fr); border: 0; gap: 28px; }
+    .wwd-item { border: 0; border-top: 3px solid var(--navy); }
+    .wwd-en { font-size: clamp(3rem, 6vw, 5rem); }
+  }
+  .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 56px; }
+  @media (min-width: 760px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+  .stats div { background: var(--ice); border-radius: var(--radius); padding: 22px; display: flex; flex-direction: column; }
+  .stats strong { font-size: clamp(2.2rem, 5vw, 3.2rem); color: var(--blue); line-height: 1.1; }
+  .stats span { font-size: .88rem; color: var(--muted); }
+
+  /* JOURNEY */
+  .journey-sec { overflow: hidden; }
+  .journey-sec :global(.jb) { width: 700px; left: -300px; top: 30%; }
+  .journey-wrap { margin-top: 64px; position: relative; }
+
+  /* FEATURE */
+  .feature { display: grid; gap: 0; background: var(--white); border-radius: calc(var(--radius) + 6px); overflow: hidden; margin-top: 40px; box-shadow: var(--shadow); }
+  .feature-media :global(.photo) { border-radius: 0; }
+  .feature-body { padding: clamp(28px, 4vw, 52px); }
+  .feature-meta { display: flex; gap: 12px; align-items: center; font-size: .8rem; color: var(--muted); letter-spacing: .1em; }
+  .gm { font-size: clamp(2.4rem, 5vw, 3.6rem); margin: .2em 0 0; letter-spacing: .02em; }
+  .gm-sub { font-weight: 700; color: var(--blue); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 1em 0 1.6em; }
+  .feature-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+  .feature-cta .btn--ghost { color: var(--navy); }
+  @media (min-width: 900px) {
+    .feature { grid-template-columns: 1.1fr 1fr; }
+    .feature-media :global(.photo) { aspect-ratio: auto !important; height: 100%; min-height: 360px; }
+  }
+  .future { margin-top: 28px; color: var(--muted); font-size: .9rem; letter-spacing: .12em; }
+  .future span { font-family: var(--font); letter-spacing: 0; }
+
+  /* ACTION */
+  .action { display: grid; gap: 20px; margin-top: 48px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+  .action-item { background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; transition: transform .35s var(--ease), box-shadow .35s var(--ease), background .35s, opacity .8s var(--ease); }
+  .action-item.is-in:hover { transform: translateY(-4px); box-shadow: var(--shadow); background: var(--white); }
+  .action-icon { font-size: 2rem; display: inline-grid; place-items: center; width: 60px; height: 60px; border-radius: 40% 60% 55% 45%; background: var(--ice); margin-bottom: 18px; }
+  .action-en { font-size: .75rem; font-weight: 700; letter-spacing: .18em; color: var(--blue); margin-bottom: .3em; }
+  .action-item h3 { font-size: 1.3rem; }
+  .action-item p:last-child { color: var(--muted); margin: 0; font-size: .95rem; }
+
+  /* MAP */
+  .map-grid { display: grid; gap: 48px; align-items: center; }
+  @media (min-width: 900px) { .map-grid { grid-template-columns: 1fr 1fr; } }
+
+  .head-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 40px; }
+  .head-row .h-section { margin: 0; }
+
+  /* JOIN */
+  .join-grid { display: grid; gap: 24px; margin-top: 40px; }
+  @media (min-width: 900px) { .join-grid { grid-template-columns: .9fr 1.1fr; } }
+  .time-card { background: var(--navy); color: var(--white); border-radius: var(--radius); padding: clamp(28px, 4vw, 44px); position: relative; overflow: hidden; }
+  .time-card::after { content: ''; position: absolute; width: 200px; height: 200px; right: -60px; bottom: -60px; background: var(--blue); border-radius: 45% 55% 60% 40%; opacity: .6; }
+  .time-card .small { font-size: .75rem; letter-spacing: .25em; color: var(--lime); }
+  .time { white-space: nowrap; font-size: clamp(2.2rem, 5.4vw, 3.4rem); font-weight: 700; line-height: 1.1; margin: .1em 0 .3em; }
+  .time span { color: var(--sky); margin: 0 .1em; }
+  .who { color: #b8c6e6; font-size: .92rem; position: relative; z-index: 1; margin: 0; }
+  .perks { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+  .perks li { background: var(--ice); border-radius: var(--radius-sm); padding: 18px; font-weight: 700; display: flex; flex-direction: column; gap: 8px; }
+  .perks li span { font-size: 1.6rem; }
+  .experience { margin-top: 48px; padding: clamp(28px, 4vw, 44px); border: 2px dashed var(--line); border-radius: var(--radius); }
+  .experience h3 { font-size: clamp(1.3rem, 2.6vw, 1.8rem); }
+  .experience p { color: var(--muted); max-width: 44em; }
+</style>

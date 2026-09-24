@@ -1,0 +1,100 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PageHero from '../components/PageHero.astro';
+import { categories, type CategoryKey } from '../data/site';
+import { getProjects, url } from '../scripts/utils';
+
+const projects = await getProjects();
+const years = [...new Set(projects.map((p) => p.data.year))].sort((a, b) => b - a);
+const cats = [...new Set(projects.map((p) => p.data.category))] as CategoryKey[];
+const partners = [...new Set(projects.flatMap((p) => p.data.partners))].sort();
+---
+<Layout title="歷屆足跡" description="高大科傳社歷年活動與專案的完整紀錄，可依年份、類型與合作單位篩選。">
+  <PageHero eyebrow="Archive" title="歷屆足跡" lead="每一屆做過的事，都留在這裡，交給下一屆接著寫。" />
+
+  <section class="section section--white">
+    <div class="wrap">
+      <form class="filters" aria-label="篩選歷屆活動" data-archive-filter>
+        <label>年份
+          <select name="year"><option value="">全部年份</option>{years.map((y) => <option>{y}</option>)}</select>
+        </label>
+        <label>活動類型
+          <select name="category"><option value="">全部類型</option>{cats.map((c) => <option value={c}>{categories[c].label}</option>)}</select>
+        </label>
+        <label>合作單位
+          <select name="partner"><option value="">全部單位</option>{partners.map((p) => <option>{p}</option>)}</select>
+        </label>
+        <p class="count" aria-live="polite"><strong data-archive-count>{projects.length}</strong> 筆紀錄</p>
+      </form>
+
+      <div class="timeline">
+        {years.map((y) => (
+          <section class="year-block" data-year-block={y}>
+            <h2 class="year en">{y}</h2>
+            <ul>
+              {projects.filter((p) => p.data.year === y).map((p) => (
+                <li data-year={y} data-category={p.data.category} data-partners={p.data.partners.join('|')}>
+                  <a href={url(`projects/${p.id}`)}>
+                    <span class="date en">{p.data.date.toISOString().slice(5, 7)}月</span>
+                    <span class="t">
+                      <strong>{p.data.title}</strong>
+                      <small>{categories[p.data.category].label}・{p.data.involvement}{p.data.partners.length ? `・${p.data.partners.join('、')}` : ''}</small>
+                    </span>
+                    <span class="go" aria-hidden="true">→</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+        <p class="empty" hidden data-archive-empty>沒有符合條件的紀錄。</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-archive-filter]');
+  const items = document.querySelectorAll<HTMLElement>('.timeline li');
+  const blocks = document.querySelectorAll<HTMLElement>('[data-year-block]');
+  const count = document.querySelector('[data-archive-count]');
+  const empty = document.querySelector<HTMLElement>('[data-archive-empty]');
+  const apply = () => {
+    const f = new FormData(form!);
+    const y = f.get('year'), c = f.get('category'), p = String(f.get('partner') || '');
+    let n = 0;
+    items.forEach((li) => {
+      const ok = (!y || li.dataset.year === y) && (!c || li.dataset.category === c) &&
+        (!p || (li.dataset.partners || '').split('|').includes(p));
+      li.hidden = !ok; if (ok) n++;
+    });
+    blocks.forEach((b) => (b.hidden = !b.querySelector('li:not([hidden])')));
+    if (count) count.textContent = String(n);
+    if (empty) empty.hidden = n > 0;
+  };
+  form?.addEventListener('change', apply);
+  form?.addEventListener('submit', (e) => e.preventDefault());
+</script>
+
+<style>
+  .filters { display: flex; flex-wrap: wrap; gap: 14px; align-items: end; padding: 20px; background: var(--ice); border-radius: var(--radius); margin-bottom: 56px; }
+  label { display: grid; gap: 4px; font-size: .8rem; font-weight: 700; color: var(--muted); flex: 1 1 160px; }
+  select { font: inherit; font-size: 1rem; padding: .65em .8em; border-radius: 10px; border: 1px solid var(--line); background: var(--white); color: var(--ink); }
+  .count { margin: 0 0 .6em; color: var(--muted); }
+  .count strong { color: var(--blue); font-size: 1.3rem; }
+  .timeline { position: relative; }
+  .year-block { display: grid; gap: 8px 40px; margin-bottom: 48px; }
+  @media (min-width: 800px) { .year-block { grid-template-columns: 160px 1fr; } }
+  .year { font-size: clamp(2.4rem, 6vw, 4rem); color: var(--navy); line-height: 1; position: sticky; top: 90px; align-self: start; margin: 0; }
+  ul { list-style: none; padding: 0 0 0 22px; margin: 0; border-left: 2px solid var(--line); }
+  li { position: relative; }
+  li::before { content: ''; position: absolute; left: -29px; top: 26px; width: 12px; height: 12px; border-radius: 50%; background: var(--white); border: 3px solid var(--blue); }
+  li a { display: flex; gap: 16px; align-items: center; padding: 16px 12px; border-radius: var(--radius-sm); text-decoration: none; transition: background .2s; }
+  li a:hover { background: var(--ice); }
+  .date { font-size: .85rem; color: var(--muted); flex: none; width: 3em; }
+  .t { display: flex; flex-direction: column; flex: 1; }
+  .t small { color: var(--muted); }
+  .go { color: var(--blue); transition: transform .2s; }
+  li a:hover .go { transform: translateX(4px); }
+  .empty { text-align: center; color: var(--muted); padding: 40px; }
+</style>
