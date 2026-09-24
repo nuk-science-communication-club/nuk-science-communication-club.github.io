@@ -13,7 +13,7 @@ partners: [在地果農（示意，待確認）]
 location: 高雄
 externalLink:
   label: Explore Greenmind
-  url: https://example.com   # TODO: 換成 Greenmind 官方連結
+  url: https://greenmind-agri.github.io
 featured: true
 ---
 
