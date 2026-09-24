@@ -10,8 +10,8 @@ const isActive = (href: string) => path.startsWith(url(href));
     <a class="brand" href={url()} aria-label="回到首頁">
       <Logo />
       <span class="brand-text">
-        <strong>高大科傳社</strong>
-        <small class="en">NUK SCICOMM</small>
+        <strong>高雄大學科學傳播社</strong>
+        <small class="en">NUK SCIENCE COMMUNICATION CLUB</small>
       </span>
     </a>
     <nav class="desktop-nav" aria-label="主選單">
@@ -53,8 +53,8 @@ const isActive = (href: string) => path.startsWith(url(href));
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 72px; }
   .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .brand-text { display: flex; flex-direction: column; line-height: 1.1; }
-  .brand-text strong { font-size: 1rem; letter-spacing: .06em; }
-  .brand-text small { font-size: .62rem; color: var(--sky); letter-spacing: .2em; }
+  .brand-text strong { white-space: nowrap; font-size: 1rem; letter-spacing: .06em; }
+  .brand-text small { font-size: .56rem; color: var(--sky); letter-spacing: .08em; }
   .desktop-nav { display: none; gap: 4px; }
   .desktop-nav a {
     text-decoration: none; padding: .5em .9em; border-radius: 999px; font-size: .95rem; font-weight: 500;
@@ -62,7 +62,7 @@ const isActive = (href: string) => path.startsWith(url(href));
   }
   .desktop-nav a:hover, .desktop-nav a[aria-current] { background: rgba(255,255,255,.1); }
   .actions { display: flex; align-items: center; gap: 10px; }
-  .join-cta { padding: .55em 1.1em; font-size: .85rem; }
+  .join-cta { white-space: nowrap; padding: .55em 1.1em; font-size: .85rem; }
   .nav-toggle {
     width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3);
     background: transparent; display: grid; place-content: center; gap: 6px; cursor: pointer;
@@ -85,5 +85,13 @@ const isActive = (href: string) => path.startsWith(url(href));
     .desktop-nav { display: flex; }
     .nav-toggle, .mobile-nav { display: none; }
   }
-  @media (max-width: 380px) { .brand-text small { display: none; } }
+  @media (max-width: 480px) {
+    .brand-text small { display: none; }
+    .brand { gap: 8px; min-width: 0; }
+    .brand :global(svg) { width: 30px; height: 30px; flex: none; }
+    .brand-text strong { font-size: .88rem; letter-spacing: 0; }
+    .actions { gap: 6px; }
+    .join-cta { padding: .5em .85em; font-size: .75rem; }
+    .nav-toggle { width: 40px; height: 40px; }
+  }
 </style>

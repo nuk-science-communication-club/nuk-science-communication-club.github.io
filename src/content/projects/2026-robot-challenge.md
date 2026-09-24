@@ -7,7 +7,7 @@ category: event
 involvement: 活動協作
 tags: [Robot, Event Support]
 description: 以活動協作身分參與高雄盃機器人挑戰賽，支援場地、賽務與器材。
-about: 高雄盃機器人挑戰賽是在地大型機器人競賽。科傳社並非主辦單位，而是以活動協作／工作人員身分參與。
+about: 高雄盃機器人挑戰賽是在地大型機器人競賽。高雄大學科學傳播社並非主辦單位，而是以活動協作／工作人員身分參與。
 ourRole: [場控, 賽務支援, 器材管理, 選手引導]
 partners: [主辦單位（待補）]
 location: 高雄

@@ -3,5 +3,5 @@ export const nav = [
   { href: 'join', label: '加入我們', en: 'JOIN' },
   { href: 'collaborate', label: '合作邀請', en: 'COLLABORATE' },
   { href: 'archive', label: '歷屆足跡', en: 'ARCHIVE' },
-  { href: 'about', label: '關於科傳', en: 'ABOUT' },
+  { href: 'about', label: '關於我們', en: 'ABOUT' },
 ];

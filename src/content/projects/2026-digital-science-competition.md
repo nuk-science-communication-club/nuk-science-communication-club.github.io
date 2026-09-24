@@ -7,7 +7,7 @@ category: event
 involvement: 活動支援
 tags: [Competition, Event Support]
 description: 支援數位化科學競賽的現場執行，讓比賽流程順利進行。
-about: 科傳社社員以工作人員身分參與數位化科學競賽的現場執行。
+about: 高雄大學科學傳播社社員以工作人員身分參與數位化科學競賽的現場執行。
 ourRole: [活動支援, 關卡關主, 現場引導]
 partners: [主辦單位（待補）]
 ---

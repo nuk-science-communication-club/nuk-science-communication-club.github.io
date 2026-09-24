@@ -2,10 +2,10 @@
 // 全站共用資訊：換屆或資訊異動時只要改這個檔案
 // ───────────────────────────────────────────────
 export const site = {
-  name: '國立高雄大學科學傳播社',
-  shortName: '高大科傳社',
+  name: '高雄大學科學傳播社',
+  shortName: '高雄大學科學傳播社',
   nameEn: 'NUK Science Communication Club',
-  title: '國立高雄大學科學傳播社｜NUK Science Communication Club',
+  title: '高雄大學科學傳播社｜NUK Science Communication Club',
   description:
     '做酷科技，把科學帶出去。從科技實作、自走車與科學工作坊，到國中科學社團、科普活動及社員專案。',
   slogan: '做酷科技，把科學帶出去。',
@@ -20,7 +20,7 @@ export const site = {
     day: '每週三',
     time: '18:00–20:00',
     place: '理學院 508 創客教室',
-    who: '高大大一至大三學生',
+    who: '高雄大學大一至大三學生',
     fee: '免社費',
   },
 

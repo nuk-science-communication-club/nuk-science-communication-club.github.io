@@ -9,7 +9,7 @@ const years = [...new Set(projects.map((p) => p.data.year))].sort((a, b) => b - 
 const cats = [...new Set(projects.map((p) => p.data.category))] as CategoryKey[];
 const partners = [...new Set(projects.flatMap((p) => p.data.partners))].sort();
 ---
-<Layout title="歷屆足跡" description="高大科傳社歷年活動與專案的完整紀錄，可依年份、類型與合作單位篩選。">
+<Layout title="歷屆足跡" description="高雄大學科學傳播社歷年活動與專案的完整紀錄，可依年份、類型與合作單位篩選。">
   <PageHero eyebrow="Archive" title="歷屆足跡" lead="每一屆做過的事，都留在這裡，交給下一屆接著寫。" />
 
   <section class="section section--white">

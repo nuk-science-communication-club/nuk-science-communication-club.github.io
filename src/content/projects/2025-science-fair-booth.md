@@ -7,7 +7,7 @@ category: outreach
 involvement: 主辦
 tags: [Outreach, Hands-on]
 description: 在科普市集擺攤，用互動實驗讓大小朋友當場玩出科學。
-about: 科傳社在科普市集設置互動攤位，把社課中做過的實驗與作品帶到大眾面前。
+about: 高雄大學科學傳播社在科普市集設置互動攤位，把社課中做過的實驗與作品帶到大眾面前。
 ourRole: [攤位設計, 科學展示, 互動解說]
 location: 待補
 ---

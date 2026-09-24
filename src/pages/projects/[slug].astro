@@ -64,7 +64,7 @@ const num = () => String(++n).padStart(2, '0');
       <dl>
         <div><dt>年份</dt><dd>{d.year}</dd></div>
         <div><dt>類型</dt><dd>{cat.label}</dd></div>
-        <div><dt>科傳社角色</dt><dd>{d.involvement}</dd></div>
+        <div><dt>高雄大學科學傳播社的角色</dt><dd>{d.involvement}</dd></div>
         {d.partners.length > 0 && <div><dt>合作單位</dt><dd>{d.partners.join('、')}</dd></div>}
         {d.location && <div><dt>地點</dt><dd>{d.location}</dd></div>}
       </dl>
@@ -83,7 +83,7 @@ const num = () => String(++n).padStart(2, '0');
       {d.ourRole.length > 0 && (
         <section class="block">
           <p class="num en">{num()} OUR ROLE</p>
-          <h2>{d.category === 'member' ? '團隊負責什麼？' : '科傳社在裡面負責什麼？'}</h2>
+          <h2>{d.category === 'member' ? '團隊負責什麼？' : '高雄大學科學傳播社在裡面負責什麼？'}</h2>
           <ul class="roles">{d.ourRole.map((x) => <li>{x}</li>)}</ul>
         </section>
       )}
