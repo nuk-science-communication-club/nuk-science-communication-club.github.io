@@ -69,7 +69,7 @@ const num = () => String(++n).padStart(2, '0');
         {d.location && <div><dt>地點</dt><dd>{d.location}</dd></div>}
       </dl>
       {d.externalLink && (
-        <a class="btn btn--primary" href={d.externalLink.url} target="_blank" rel="noopener">{d.externalLink.label} ↗</a>
+        <a class="btn btn--primary" href={d.externalLink.url}>{d.externalLink.label} ↗</a>
       )}
     </aside>
 

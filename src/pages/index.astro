@@ -122,9 +122,8 @@ const perks = [
             <p>{greenmind.data.description}</p>
             <div class="tags">{greenmind.data.tags.map((t) => <span class="tag">{t}</span>)}</div>
             <div class="feature-cta">
-              <a class="btn btn--primary" href={url('projects/greenmind')}>看專案介紹 <span class="arrow" aria-hidden="true">→</span></a>
               {greenmind.data.externalLink && (
-                <a class="btn btn--ghost" href={greenmind.data.externalLink.url} target="_blank" rel="noopener">Explore Greenmind ↗</a>
+                <a class="btn btn--primary" href={greenmind.data.externalLink.url}>前往 Greenmind 專案網站 ↗</a>
               )}
             </div>
           </div>
