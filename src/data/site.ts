@@ -11,10 +11,10 @@ export const site = {
   slogan: '做酷科技，把科學帶出去。',
   sloganEn: 'MAKE. SHARE. CREATE.',
 
-  // TODO: 換成社團正式資訊
+  // 社團社群資訊與聯絡方式
   email: 'nuk.scicomm@example.com',
-  instagram: 'https://www.instagram.com/',
-  instagramHandle: '@nuk_scicomm',
+  instagram: 'https://www.instagram.com/nuk_science_club/',
+  instagramHandle: '@nuk_science_club',
 
   meeting: {
     day: '每週三',

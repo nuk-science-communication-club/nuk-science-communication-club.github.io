@@ -79,7 +79,7 @@ public/                 ← 圖片、favicon、og-image.png
 
 ## 目前待補（上線前）
 
-- [ ] `src/data/site.ts` 的 Email、Instagram 換成正式資訊
+- [ ] `src/data/site.ts` 的 Email 換成正式資訊
 - [ ] 所有活動的實際照片、日期、成果數據（標示 ✏️ 的段落）
 - [ ] Greenmind 的正式介紹與外部連結
 - [ ] 大型活動的主辦單位名稱
