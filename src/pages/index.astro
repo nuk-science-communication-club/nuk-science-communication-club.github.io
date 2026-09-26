@@ -19,7 +19,8 @@ const latest = [
 // 名稱含「待」的（待補／待確認）先不列入統計
 const partners = new Set(projects.flatMap((p) => p.data.partners).filter((n) => !n.includes('待')));
 const schools = projects.filter((p) => p.data.category === 'school' && p.data.partners.some((n) => n.includes('國中'))).length;
-const years = new Set(projects.map((p) => p.data.year));
+// 社團足跡年數不只涵蓋目前已上架活動的年份。
+const footprintYears = 4;
 
 const heroShots = [
   { src: 'images/hero/car.jpg', alt: '學生觀察自走車在軌道上運行', v: 'blue' },
@@ -89,7 +90,7 @@ const perks = [
         <div><strong class="en" data-count={projects.length}>{projects.length}</strong><span>累積活動與專案</span></div>
         <div><strong class="en" data-count={schools}>{schools}</strong><span>合作國中科學社團</span></div>
         <div><strong class="en" data-count={partners.size}>{partners.size}</strong><span>合作單位</span></div>
-        <div><strong class="en" data-count={years.size}>{years.size}</strong><span>年的足跡</span></div>
+        <div><strong class="en" data-count={footprintYears}>{footprintYears}</strong><span>年的足跡</span></div>
       </div>
     </div>
   </section>
