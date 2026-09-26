@@ -2,6 +2,13 @@
 import { journey } from '../data/journey';
 import Photo from './Photo.astro';
 const variants = ['sky', 'blue', 'navy', 'lime', 'blue'] as const;
+const photos = [
+  { src: 'images/journey/explore.jpg', alt: '在自走車課程中接觸科技與程式' },
+  { src: 'images/journey/make.jpg', alt: '參與者展示自己組裝的自走車' },
+  { src: 'images/journey/share.jpg', alt: '社員在工作坊中協助學員實作' },
+  { src: 'images/journey/create.jpg', alt: '社員參與高雄大學創新創業競賽' },
+  { src: 'images/journey/further.jpg', alt: '團隊在海報競賽現場介紹專案' },
+];
 ---
 <ol class="journey" data-journey>
   {journey.map((s, i) => (
@@ -14,7 +21,7 @@ const variants = ['sky', 'blue', 'navy', 'lime', 'blue'] as const;
         <ul class="chips">{s.items.map((it) => <li>{it}</li>)}</ul>
       </div>
       <div class="pic reveal" data-delay="1">
-        <Photo hint={`${s.key}｜${s.label}的照片`} variant={variants[i]} ratio="4 / 3" />
+        <Photo src={photos[i].src} alt={photos[i].alt} variant={variants[i]} ratio="4 / 3" />
       </div>
     </li>
   ))}

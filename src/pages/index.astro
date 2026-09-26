@@ -18,14 +18,14 @@ const latest = [
 
 // 名稱含「待」的（待補／待確認）先不列入統計
 const partners = new Set(projects.flatMap((p) => p.data.partners).filter((n) => !n.includes('待')));
-const schools = projects.filter((p) => p.data.category === 'school').length;
+const schools = projects.filter((p) => p.data.category === 'school' && p.data.partners.some((n) => n.includes('國中'))).length;
 const years = new Set(projects.map((p) => p.data.year));
 
 const heroShots = [
-  { hint: '自走車運行', v: 'blue' },
-  { hint: '社員在國中上課', v: 'sky' },
-  { hint: '小朋友做實驗', v: 'navy' },
-  { hint: '科普市集', v: 'lime' },
+  { src: 'images/hero/car.jpg', alt: '學生觀察自走車在軌道上運行', v: 'blue' },
+  { src: 'images/hero/class.jpg', alt: '社員在國中科學教室陪伴學生上課', v: 'sky' },
+  { src: 'images/hero/experiment.jpg', alt: '國中生動手操作科學實驗器材', v: 'navy' },
+  { src: 'images/hero/fair.jpg', alt: '科普市集攤位上，社員與參與者互動', v: 'lime' },
 ] as const;
 
 const whatWeDo = [
@@ -63,7 +63,7 @@ const perks = [
       </div>
       <div class="hero-mosaic" aria-label="社員活動照片">
         {heroShots.map((s, i) => (
-          <div class={`shot s${i}`}><Photo hint={s.hint} variant={s.v} ratio={i % 3 === 0 ? '4 / 5' : '1 / 1'} eager /></div>
+          <div class={`shot s${i}`}><Photo src={s.src} alt={s.alt} variant={s.v} ratio={i % 3 === 0 ? '4 / 5' : '1 / 1'} eager /></div>
         ))}
       </div>
     </div>
