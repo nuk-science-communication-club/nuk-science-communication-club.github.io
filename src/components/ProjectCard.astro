@@ -14,7 +14,7 @@ const cardHref = externalSite?.url ?? url(`projects/${project.id}`);
   data-partners={d.partners.join('|')}>
   <a href={cardHref} class="link">
     <div class="media">
-      <Photo src={d.coverImage} alt={d.coverAlt ?? d.title} hint={d.title} ratio="16 / 10" variant={variants[d.category]} />
+      <Photo src={d.coverImage} alt={d.coverAlt ?? d.title} hint={d.title} ratio="16 / 10" variant={variants[d.category]} cropBottom={project.id === 'greenmind'} />
       <span class="involve">{d.involvement}</span>
     </div>
     <div class="body">
@@ -34,6 +34,7 @@ const cardHref = externalSite?.url ?? url(`projects/${project.id}`);
   .media { position: relative; }
   .media :global(.photo) { border-radius: 0; }
   .card:hover .media :global(img) { transform: scale(1.05); }
+  .card:hover .media :global(.photo--crop-bottom img) { transform: scale(1.11); }
   .involve { position: absolute; top: 12px; left: 12px; font-size: .72rem; font-weight: 700;
     background: rgba(255,255,255,.92); color: var(--navy); padding: .3em .75em; border-radius: 999px; }
   .body { padding: 20px 22px 24px; display: flex; flex-direction: column; flex: 1; }
