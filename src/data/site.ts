@@ -12,7 +12,7 @@ export const site = {
   sloganEn: 'MAKE. SHARE. CREATE.',
 
   // 社團社群資訊與聯絡方式
-  email: 'nuk.scicomm@example.com',
+  email: 'a1124350@mail.nuk.edu.tw',
   instagram: 'https://www.instagram.com/nuk_science_club/',
   instagramHandle: '@nuk_science_club',
 
@@ -23,10 +23,6 @@ export const site = {
     who: '高雄大學大一至大三學生',
     fee: '免社費',
   },
-
-  // 聯絡表單：到 https://formspree.io 建立表單後把網址貼在這裡（例：https://formspree.io/f/xxxxxx）
-  // 留空則會改用 Email 寄信的方式送出。
-  formEndpoint: '',
 
   // Google Analytics 4 評估 ID（例：G-XXXXXXXXXX），留空則不載入
   gaId: '',

@@ -13,7 +13,6 @@ const services = [
   { t: '科普攤位', en: 'SCIENCE BOOTH', d: '適合科學市集、園遊會與大型活動的互動攤位。', i: '🧪' },
   { t: '活動協作', en: 'EVENT SUPPORT', d: '大型競賽、科學活動的現場支援與工作人員。', i: '🤝' },
 ];
-const types = ['科學社團', '科學營隊', 'STEM 工作坊', '科普攤位', '活動協作', '其他'];
 ---
 <Layout title="合作邀請" description="邀請高雄大學科學傳播社到你的學校或活動：科學社團、科學營隊、STEM 工作坊、科普攤位與大型活動協作。">
   <PageHero eyebrow="Collaborate" title="想一起把科學<br />帶到更多地方？" lead="給國中、高中、老師、學校、基金會、政府、企業與教育單位。">
@@ -52,62 +51,15 @@ const types = ['科學社團', '科學營隊', 'STEM 工作坊', '科普攤位',
       <div>
         <p class="eyebrow en">Contact</p>
         <h2 class="h-section">聊聊你的想法</h2>
-        <p class="lead">填寫表單或直接來信，我們會盡快回覆。</p>
+        <p class="lead">歡迎直接來信或透過 Instagram 聯絡我們。</p>
         <ul class="direct">
           <li><span>Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
           <li><span>Instagram</span><a href={site.instagram} target="_blank" rel="noopener">{site.instagramHandle}</a></li>
         </ul>
       </div>
-      <form class="form" data-contact data-endpoint={site.formEndpoint} data-email={site.email}>
-        <label>單位名稱 *<input name="單位名稱" required autocomplete="organization" /></label>
-        <label>聯絡人 *<input name="聯絡人" required autocomplete="name" /></label>
-        <label>Email *<input name="email" type="email" required autocomplete="email" /></label>
-        <label>電話（選填）<input name="電話" type="tel" autocomplete="tel" /></label>
-        <label>合作類型 *
-          <select name="合作類型" required>
-            <option value="">請選擇</option>
-            {types.map((t) => <option>{t}</option>)}
-          </select>
-        </label>
-        <label>預計日期<input name="預計日期" placeholder="例：2027 年 3 月" /></label>
-        <label>活動地點<input name="活動地點" /></label>
-        <label>參與人數<input name="參與人數" inputmode="numeric" /></label>
-        <label class="full">需求說明 *<textarea name="需求說明" rows="5" required></textarea></label>
-        <div class="full submit-row">
-          <button class="btn btn--lime" type="submit">送出 <span class="arrow" aria-hidden="true">→</span></button>
-          <p class="status" role="status" aria-live="polite"></p>
-        </div>
-      </form>
     </div>
   </section>
 </Layout>
-
-<script>
-  const form = document.querySelector<HTMLFormElement>('[data-contact]');
-  const status = form?.querySelector('.status');
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const data = new FormData(form);
-    const endpoint = form.dataset.endpoint;
-    if (endpoint) {
-      if (status) status.textContent = '送出中…';
-      try {
-        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-        if (!res.ok) throw new Error();
-        form.reset();
-        if (status) status.textContent = '已收到！我們會盡快與您聯絡。';
-      } catch {
-        if (status) status.textContent = '送出失敗，請改用 Email 聯絡我們。';
-      }
-      return;
-    }
-    // 未設定表單服務時：開啟使用者的郵件軟體
-    const body = [...data.entries()].map(([k, v]) => `${k}：${v}`).join('\n');
-    const subject = `合作邀請｜${data.get('單位名稱')}`;
-    location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    if (status) status.textContent = '已開啟您的郵件軟體，確認內容後寄出即可。';
-  });
-</script>
 
 <style>
   .services { display: grid; gap: 16px; margin-top: 40px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); }
@@ -117,18 +69,9 @@ const types = ['科學社團', '科學營隊', 'STEM 工作坊', '科普攤位',
   .svc .en { font-size: .72rem; font-weight: 700; letter-spacing: .16em; color: var(--blue); margin: .8em 0 .2em; }
   .svc h3 { font-size: 1.25rem; }
   .d { color: var(--muted); font-size: .93rem; margin: 0; }
-  .contact { display: grid; gap: 48px; }
-  @media (min-width: 960px) { .contact { grid-template-columns: .8fr 1.2fr; } }
-  .direct { list-style: none; padding: 0; margin: 32px 0 0; display: grid; gap: 14px; }
-  .direct li { display: flex; flex-direction: column; }
+  .contact { display: grid; gap: 48px; max-width: 900px; margin-inline: auto; text-align: center; }
+  .direct { list-style: none; padding: 0; margin: 32px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 16px; }
+  .direct li { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 22px; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius); background: rgba(255,255,255,.05); }
   .direct span { font-size: .78rem; color: var(--sky); letter-spacing: .1em; }
   .direct a { font-size: 1.15rem; font-weight: 700; text-decoration: none; word-break: break-all; }
-  .form { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: var(--radius); padding: clamp(20px, 4vw, 36px); }
-  .full { grid-column: 1 / -1; }
-  label { display: grid; gap: 6px; font-size: .85rem; font-weight: 700; color: #c9d5f0; }
-  input, select, textarea { font: inherit; font-size: 1rem; color: var(--white); background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.18); border-radius: 10px; padding: .75em .9em; width: 100%; }
-  select option { color: var(--ink); }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--sky); background: rgba(255,255,255,.1); }
-  .submit-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
-  .status { margin: 0; color: var(--lime); font-size: .9rem; }
 </style>
