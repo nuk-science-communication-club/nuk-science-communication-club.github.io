@@ -9,7 +9,7 @@ import { getProjects, url, asset } from '../../scripts/utils';
 
 export async function getStaticPaths() {
   const all = await getProjects();
-  return all.map((project) => {
+  return all.filter((project) => !(project.data.category === 'member' && project.data.externalLink)).map((project) => {
     // 相關活動：同類型優先，再用共同 tag 補足
     const related = all
       .filter((p) => p.id !== project.id)

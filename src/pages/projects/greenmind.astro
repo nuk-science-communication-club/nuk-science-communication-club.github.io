@@ -1,0 +1,20 @@
+---
+import { getProjects } from '../../scripts/utils';
+
+const greenmind = (await getProjects()).find((project) => project.id === 'greenmind');
+if (!greenmind?.data.externalLink) throw new Error('Greenmind project website is not configured.');
+const destination = greenmind.data.externalLink.url;
+---
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="refresh" content={`0; url=${destination}`} />
+    <title>前往 Greenmind 專案網站</title>
+  </head>
+  <body>
+    <p>即將前往 <a href={destination}>Greenmind 專案網站</a>。</p>
+    <script is:inline define:vars={{ destination }}>window.location.replace(destination);</script>
+  </body>
+</html>

@@ -7,10 +7,12 @@ interface Props { project: CollectionEntry<'projects'>; delay?: number }
 const { project, delay = 0 } = Astro.props;
 const d = project.data;
 const variants = { school: 'blue', outreach: 'sky', workshop: 'navy', event: 'navy', member: 'lime' } as const;
+const externalSite = d.category === 'member' ? d.externalLink : undefined;
+const cardHref = externalSite?.url ?? url(`projects/${project.id}`);
 ---
 <article class="card reveal" data-delay={delay} data-year={d.year} data-category={d.category}
   data-partners={d.partners.join('|')}>
-  <a href={url(`projects/${project.id}`)} class="link">
+  <a href={cardHref} class="link">
     <div class="media">
       <Photo src={d.coverImage} alt={d.coverAlt ?? d.title} hint={d.title} ratio="16 / 10" variant={variants[d.category]} />
       <span class="involve">{d.involvement}</span>
@@ -18,9 +20,9 @@ const variants = { school: 'blue', outreach: 'sky', workshop: 'navy', event: 'na
     <div class="body">
       <p class="meta"><span class="en year">{d.year}</span><span>{categories[d.category].label}</span></p>
       <h3>{d.title}</h3>
-      <p class="desc">{d.description}</p>
-      <div class="tags">{d.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}</div>
-      <span class="more en">View Project <span aria-hidden="true">→</span></span>
+      {!externalSite && <p class="desc">{d.description}</p>}
+      {!externalSite && <div class="tags">{d.tags.slice(0, 3).map((t) => <span class="tag">{t}</span>)}</div>}
+      <span class="more en">{externalSite?.label ?? 'View Project'} <span aria-hidden="true">{externalSite ? '↗' : '→'}</span></span>
     </div>
   </a>
 </article>
